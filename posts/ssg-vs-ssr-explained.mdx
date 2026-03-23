@@ -1,0 +1,100 @@
+---
+title: 'Understanding Static Site Generation vs Server-Side Rendering'
+date: '2024-02-20'
+author: 'Maria Garcia'
+tags: ['SSG', 'SSR', 'Performance', 'Next.js']
+excerpt: 'A deep dive into the differences between Static Site Generation and Server-Side Rendering, and when to use each approach in your Next.js projects.'
+image: 'https://picsum.photos/seed/ssg/800/400'
+---
+
+## The Rendering Spectrum
+
+Modern web frameworks give developers a range of rendering strategies. Understanding the trade-offs is essential for making the right architecture decisions.
+
+## Static Site Generation (SSG)
+
+With SSG, pages are pre-rendered at **build time**. The resulting HTML files are served directly from a CDN.
+
+```javascript
+// pages/blog/index.js
+export async function getStaticProps() {
+  const posts = await fetchAllPosts();
+  return {
+    props: { posts },
+    // Optional: revalidate every 60 seconds (ISR)
+    revalidate: 60,
+  };
+}
+```
+
+**Best for:**
+- Blog posts and articles
+- Marketing pages
+- Documentation
+- E-commerce product pages (with ISR)
+
+**Pros:**
+- Extremely fast (served from CDN)
+- Scales effortlessly
+- Great SEO
+- Low server costs
+
+**Cons:**
+- Stale data until rebuild
+- Long build times for large sites
+
+## Server-Side Rendering (SSR)
+
+With SSR, a page is rendered on **every request**. The server fetches fresh data and returns fully-formed HTML.
+
+```javascript
+// pages/dashboard.js
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  const data = await fetchUserData(session.userId);
+  return {
+    props: { data },
+  };
+}
+```
+
+**Best for:**
+- User dashboards
+- Real-time data (stock prices, sports scores)
+- Pages with user-specific content
+
+**Pros:**
+- Always fresh data
+- Personalized content
+
+**Cons:**
+- Slower (server must respond to every request)
+- Higher infrastructure costs
+- Cannot be fully CDN-cached
+
+## Incremental Static Regeneration (ISR)
+
+ISR is the best of both worlds: pages are statically generated but automatically revalidated in the background after a set interval.
+
+```javascript
+export async function getStaticProps() {
+  return {
+    props: { data: await fetchData() },
+    revalidate: 3600, // Regenerate at most once per hour
+  };
+}
+```
+
+## Choosing the Right Strategy
+
+Here's a quick reference for picking the right rendering approach:
+
+- **Blog posts** → SSG
+- **News articles** → SSG + ISR
+- **User profiles** → SSR
+- **Product catalog** → SSG + ISR
+- **Real-time dashboards** → SSR or Client-side fetching
+
+## Conclusion
+
+There's no single best rendering strategy. Next.js is unique in that it lets you mix and match strategies on a per-page basis within the same application.

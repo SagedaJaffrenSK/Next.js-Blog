@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Code+Pro:wght@400;500&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --font-serif: 'Lora', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Source Code Pro', monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  @apply bg-stone-50 text-stone-900 transition-colors duration-300;
+}
+
+.dark body {
+  @apply bg-stone-950 text-stone-100;
+}
+
+/* Prose content inside blog posts */
+.prose {
+  @apply max-w-none;
+  font-family: var(--font-serif);
+  line-height: 1.85;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  font-family: var(--font-serif);
+  @apply font-bold text-stone-900 dark:text-stone-100;
+}
+
+.prose h2 { @apply text-2xl mt-10 mb-4; }
+.prose h3 { @apply text-xl mt-8 mb-3; }
+
+.prose p { @apply mb-5 text-stone-700 dark:text-stone-300; }
+
+.prose a {
+  @apply text-amber-700 dark:text-amber-400 underline underline-offset-2;
+}
+
+.prose strong { @apply font-bold text-stone-900 dark:text-stone-100; }
+
+.prose ul { @apply list-disc list-outside pl-6 mb-5 space-y-1; }
+.prose ol { @apply list-decimal list-outside pl-6 mb-5 space-y-1; }
+.prose li { @apply text-stone-700 dark:text-stone-300; }
+
+.prose blockquote {
+  @apply border-l-4 border-amber-500 pl-4 italic text-stone-600 dark:text-stone-400 my-6;
+}
+
+.prose table {
+  @apply w-full border-collapse my-6 text-sm;
+}
+.prose th {
+  @apply bg-stone-200 dark:bg-stone-700 text-left px-4 py-2 font-semibold;
+}
+.prose td {
+  @apply border border-stone-200 dark:border-stone-700 px-4 py-2;
+}
+
+/* Code blocks */
+.prose pre {
+  @apply bg-stone-900 dark:bg-stone-950 rounded-xl overflow-x-auto my-6 border border-stone-700;
+  font-family: var(--font-mono);
+}
+
+.prose pre code {
+  @apply text-sm leading-relaxed text-stone-100 p-4 block;
+  font-family: var(--font-mono);
+  background: transparent !important;
+}
+
+.prose code:not(pre code) {
+  @apply bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 px-1.5 py-0.5 rounded text-sm;
+  font-family: var(--font-mono);
+}
+
+/* Syntax highlighting */
+.hljs-keyword  { @apply text-purple-400; }
+.hljs-string   { @apply text-green-400; }
+.hljs-comment  { @apply text-stone-500 italic; }
+.hljs-function { @apply text-blue-400; }
+.hljs-number   { @apply text-orange-400; }
+.hljs-attr     { @apply text-amber-400; }
+.hljs-tag      { @apply text-red-400; }
+.hljs-name     { @apply text-red-400; }
+.hljs-built_in { @apply text-cyan-400; }
+.hljs-class    { @apply text-yellow-300; }
+.hljs-title    { @apply text-blue-300; }
+.hljs-params   { @apply text-stone-300; }
+.hljs-variable { @apply text-red-300; }
+.hljs-selector-tag { @apply text-red-400; }
+.hljs-selector-class { @apply text-yellow-300; }
+.hljs-property { @apply text-sky-300; }

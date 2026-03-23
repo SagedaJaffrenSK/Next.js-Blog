@@ -1,0 +1,108 @@
+---
+title: 'Docker for Frontend Developers: A Practical Guide'
+date: '2024-04-08'
+author: 'Tom Wilson'
+tags: ['Docker', 'DevOps', 'Next.js', 'Deployment']
+excerpt: 'Learn how to containerize your Next.js application with Docker and Docker Compose for consistent development and production environments.'
+image: 'https://picsum.photos/seed/docker/800/400'
+---
+
+## Why Docker for Frontend?
+
+Docker isn't just for backend engineers. Containerizing your frontend application ensures it runs **identically** across every environment — your laptop, your teammate's machine, CI/CD, and production.
+
+## Core Concepts
+
+- **Image**: A read-only template with the application and its environment
+- **Container**: A running instance of an image
+- **Dockerfile**: Instructions to build an image
+- **Docker Compose**: A tool to define and run multi-container apps
+
+## A Minimal Dockerfile for Next.js
+
+```dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+RUN npm run build
+
+EXPOSE 3000
+CMD ["npm", "start"]
+```
+
+## Optimized Multi-Stage Build
+
+For production, a multi-stage build dramatically reduces the final image size:
+
+```dockerfile
+# Stage 1: Build
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# Stage 2: Production
+FROM node:18-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV production
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+EXPOSE 3000
+CMD ["node", "server.js"]
+```
+
+## Docker Compose for Local Development
+
+```yaml
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+```
+
+## Health Checks
+
+Always add a health check so orchestrators know when your app is ready:
+
+```yaml
+healthcheck:
+  test: ["CMD", "curl", "-f", "http://localhost:3000"]
+  interval: 30s
+  timeout: 10s
+  retries: 3
+  start_period: 30s
+```
+
+## Useful Commands
+
+```bash
+# Build and start containers
+docker-compose up --build -d
+
+# View running containers
+docker ps
+
+# View logs
+docker-compose logs -f web
+
+# Stop containers
+docker-compose down
+```
+
+## Conclusion
+
+Docker makes your deployments reproducible and eliminates "works on my machine" problems. For any serious Next.js project, containerizing from the start is a great practice.

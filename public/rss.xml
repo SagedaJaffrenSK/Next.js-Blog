@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is generated at build time by src/lib/generate-rss.js -->
+<rss version="2.0">
+  <channel>
+    <title>Next.js Blog</title>
+    <link>http://localhost:3000</link>
+    <description>A high-performance blog built with Next.js and MDX</description>
+  </channel>
+</rss>

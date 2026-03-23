@@ -1,0 +1,67 @@
+---
+title: 'Mastering Tailwind CSS for Modern UI Design'
+date: '2024-02-03'
+author: 'Alex Johnson'
+tags: ['Tailwind CSS', 'CSS', 'UI Design']
+excerpt: 'Learn how to use Tailwind CSS utility classes to build beautiful, responsive UIs without writing custom CSS from scratch.'
+image: 'https://picsum.photos/seed/tailwind/800/400'
+---
+
+## What is Tailwind CSS?
+
+Tailwind CSS is a utility-first CSS framework that provides low-level utility classes to build custom designs directly in your HTML. Unlike traditional CSS frameworks like Bootstrap, Tailwind doesn't come with pre-built components — instead it gives you the building blocks to create your own.
+
+## The Utility-First Philosophy
+
+Traditional CSS approach:
+
+```css
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+```
+
+Tailwind approach:
+
+```html
+<div class="bg-white rounded-lg p-6 shadow-md">
+  <!-- card content -->
+</div>
+```
+
+Both achieve the same result, but Tailwind keeps everything in one place and eliminates the need to context-switch between HTML and CSS files.
+
+## Responsive Design Made Easy
+
+Tailwind uses a mobile-first breakpoint system. Prefix any utility with a breakpoint to apply it conditionally:
+
+```html
+<div class="text-sm md:text-base lg:text-lg">
+  Responsive text sizing
+</div>
+```
+
+## Dark Mode Support
+
+Tailwind has built-in dark mode support. Just add `dark:` before any utility:
+
+```html
+<div class="bg-white dark:bg-gray-900 text-black dark:text-white">
+  Adapts to the user's theme preference
+</div>
+```
+
+## Key Utilities to Know
+
+- **Flexbox**: `flex`, `items-center`, `justify-between`, `gap-4`
+- **Grid**: `grid`, `grid-cols-3`, `col-span-2`
+- **Spacing**: `p-4`, `m-8`, `px-6`, `mt-2`
+- **Typography**: `text-xl`, `font-bold`, `tracking-wide`, `leading-relaxed`
+- **Colors**: `text-blue-600`, `bg-gray-100`, `border-red-400`
+
+## Conclusion
+
+Tailwind CSS dramatically speeds up the development process once you internalize its class names. It also produces smaller CSS bundles in production since it only includes the classes you actually use.

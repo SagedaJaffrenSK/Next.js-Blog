@@ -1,0 +1,99 @@
+---
+title: 'React Performance Optimization Techniques'
+date: '2024-04-22'
+author: 'Sara Kim'
+tags: ['React', 'Performance', 'Optimization']
+excerpt: 'Explore practical techniques to optimize React applications — from memoization and lazy loading to virtualization and bundle splitting.'
+image: 'https://picsum.photos/seed/react-perf/800/400'
+---
+
+## Why Performance Matters
+
+A slow React app leads to frustrated users and lower conversion rates. Studies show that a one-second delay in page load can reduce conversions by **7%**. Fortunately, React provides powerful tools to keep your app fast.
+
+## 1. React.memo
+
+Prevent unnecessary re-renders of functional components:
+
+```javascript
+const PostCard = React.memo(function PostCard({ title, excerpt }) {
+  return (
+    <div>
+      <h2>{title}</h2>
+      <p>{excerpt}</p>
+    </div>
+  );
+});
+```
+
+The component only re-renders when its props change.
+
+## 2. useMemo and useCallback
+
+Memoize expensive calculations and stable function references:
+
+```javascript
+// Memoize expensive computation
+const sortedPosts = useMemo(
+  () => posts.sort((a, b) => new Date(b.date) - new Date(a.date)),
+  [posts]
+);
+
+// Stable function reference for child components
+const handleClick = useCallback((id) => {
+  navigateTo(`/posts/${id}`);
+}, []);
+```
+
+## 3. Code Splitting with dynamic()
+
+Load components only when they're needed:
+
+```javascript
+import dynamic from 'next/dynamic';
+
+const HeavyChart = dynamic(() => import('../components/HeavyChart'), {
+  loading: () => <p>Loading chart...</p>,
+  ssr: false,
+});
+```
+
+## 4. List Virtualization
+
+For long lists, only render what's visible:
+
+```javascript
+import { FixedSizeList as List } from 'react-window';
+
+function VirtualList({ posts }) {
+  const Row = ({ index, style }) => (
+    <div style={style}>
+      <PostCard {...posts[index]} />
+    </div>
+  );
+  return <List height={600} itemCount={posts.length} itemSize={120} width="100%">{Row}</List>;
+}
+```
+
+## 5. Image Optimization with next/image
+
+```jsx
+import Image from 'next/image';
+
+<Image
+  src="/hero.jpg"
+  alt="Hero image"
+  width={800}
+  height={400}
+  priority // Preload above-the-fold images
+  placeholder="blur"
+/>
+```
+
+## Profiling with React DevTools
+
+Use the React DevTools Profiler to identify which components are re-rendering unnecessarily and how long each render takes.
+
+## Conclusion
+
+Performance optimization is an iterative process. Measure first, then optimize the actual bottlenecks. Don't prematurely optimize — profile first!

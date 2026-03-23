@@ -1,0 +1,109 @@
+---
+title: 'SEO Best Practices for Next.js Applications'
+date: '2024-03-25'
+author: 'Priya Nair'
+tags: ['SEO', 'Next.js', 'Performance', 'Meta Tags']
+excerpt: 'Master SEO in Next.js by implementing meta tags, Open Graph, sitemaps, structured data, and performance optimizations that search engines love.'
+image: 'https://picsum.photos/seed/seo/800/400'
+---
+
+## Why SEO Matters for Next.js Apps
+
+Next.js is uniquely positioned for SEO success because it generates HTML on the server or at build time — meaning search engine crawlers can read your content without executing JavaScript.
+
+## Essential Meta Tags
+
+Every page should have a complete set of meta tags:
+
+```html
+<head>
+  <title>Your Page Title | Blog Name</title>
+  <meta name="description" content="A concise, compelling description under 160 chars." />
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Your Page Title" />
+  <meta property="og:description" content="Description for social sharing" />
+  <meta property="og:image" content="https://yourblog.com/og-image.jpg" />
+  <meta property="og:url" content="https://yourblog.com/post-slug" />
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Your Page Title" />
+</head>
+```
+
+## Using next-seo
+
+The `next-seo` library makes managing SEO tags easy:
+
+```javascript
+import { NextSeo } from 'next-seo';
+
+export default function BlogPost({ post }) {
+  return (
+    <>
+      <NextSeo
+        title={post.title}
+        description={post.excerpt}
+        openGraph={{
+          title: post.title,
+          description: post.excerpt,
+          images: [{ url: post.image }],
+        }}
+        twitter={{
+          cardType: 'summary_large_image',
+        }}
+      />
+      {/* ... rest of page */}
+    </>
+  );
+}
+```
+
+## Generating a Sitemap
+
+A sitemap tells search engines which pages exist on your site:
+
+```javascript
+// scripts/generate-sitemap.js
+const fs = require('fs');
+const posts = getAllPosts();
+
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://yourblog.com/</loc></url>
+  ${posts.map(p => `
+  <url>
+    <loc>https://yourblog.com/posts/${p.slug}</loc>
+    <lastmod>${p.date}</lastmod>
+  </url>`).join('')}
+</urlset>`;
+
+fs.writeFileSync('public/sitemap.xml', sitemap);
+```
+
+## Core Web Vitals
+
+Google uses Core Web Vitals as a ranking signal. Key metrics:
+
+- **LCP** (Largest Contentful Paint) – Use `next/image` and preload critical assets
+- **FID** (First Input Delay) – Minimize JavaScript execution
+- **CLS** (Cumulative Layout Shift) – Always specify image dimensions
+
+## Structured Data (JSON-LD)
+
+Add structured data to help search engines understand your content:
+
+```javascript
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.title,
+  author: { '@type': 'Person', name: post.author },
+  datePublished: post.date,
+};
+```
+
+## Conclusion
+
+SEO is not a single feature — it's a collection of best practices that together make your site more discoverable. Next.js provides the right foundation; it's up to you to layer on the SEO goodness.

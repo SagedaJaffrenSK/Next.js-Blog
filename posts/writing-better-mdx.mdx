@@ -1,0 +1,97 @@
+---
+title: 'Writing Better MDX: Components Inside Markdown'
+date: '2024-03-10'
+author: 'Chris Lee'
+tags: ['MDX', 'Markdown', 'React', 'Content']
+excerpt: 'MDX lets you use JSX components inside Markdown files. Learn how to create powerful, interactive content by combining the two.'
+image: 'https://picsum.photos/seed/mdx/800/400'
+---
+
+## What is MDX?
+
+MDX is a superset of Markdown that lets you write **JSX** directly in your `.md` or `.mdx` files. This means you can import and use React components alongside your regular Markdown content.
+
+## Why Use MDX?
+
+Standard Markdown is great for prose, but it's limited when you need:
+
+- **Interactive elements** like quizzes, demos, or code playgrounds
+- **Custom callout boxes** or alerts
+- **Data visualizations** embedded in the article
+- **Video embeds** with custom controls
+
+MDX solves all of these by letting you drop React components inline.
+
+## A Simple Example
+
+Imagine you have a custom `<Alert>` component:
+
+```jsx
+// components/Alert.jsx
+export default function Alert({ type, children }) {
+  const styles = {
+    info: 'bg-blue-50 border-blue-400 text-blue-800',
+    warning: 'bg-yellow-50 border-yellow-400 text-yellow-800',
+  };
+  return (
+    <div className={`border-l-4 p-4 ${styles[type]}`}>
+      {children}
+    </div>
+  );
+}
+```
+
+In your MDX file, you can use it directly:
+
+```mdx
+import Alert from '../components/Alert';
+
+## My Article
+
+This is regular Markdown prose.
+
+<Alert type="info">
+  This is an informational callout rendered by a React component!
+</Alert>
+
+Back to **regular Markdown** now.
+```
+
+## Setting Up next-mdx-remote
+
+The `next-mdx-remote` library is the recommended way to use MDX in Next.js with SSG:
+
+```javascript
+import { serialize } from 'next-mdx-remote/serialize';
+import { MDXRemote } from 'next-mdx-remote';
+
+const components = { Alert };
+
+export default function Post({ source }) {
+  return <MDXRemote {...source} components={components} />;
+}
+
+export async function getStaticProps({ params }) {
+  const source = fs.readFileSync(`posts/${params.slug}.mdx`, 'utf8');
+  const mdxSource = await serialize(source, {
+    parseFrontmatter: true,
+  });
+  return { props: { source: mdxSource } };
+}
+```
+
+## Frontmatter
+
+MDX files typically include YAML frontmatter at the top for metadata:
+
+```yaml
+---
+title: 'My Post'
+date: '2024-03-10'
+tags: ['mdx', 'react']
+---
+```
+
+## Conclusion
+
+MDX is a powerful tool that bridges the gap between content and code. Once you start using it, going back to plain Markdown feels limiting.

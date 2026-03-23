@@ -1,0 +1,55 @@
+---
+title: 'Getting Started with Next.js 14'
+date: '2024-01-15'
+author: 'Jane Smith'
+tags: ['Next.js', 'React', 'Web Dev']
+excerpt: 'A comprehensive guide to building modern web applications with Next.js 14, covering the App Router, Server Components, and Static Site Generation.'
+image: 'https://picsum.photos/seed/nextjs/800/400'
+---
+
+## Introduction
+
+Next.js 14 is a powerful React framework that enables developers to build high-performance web applications with ease. In this guide, we'll explore the core features that make Next.js the go-to choice for modern web development.
+
+## Why Next.js?
+
+Next.js offers several compelling advantages over a plain React application:
+
+- **Static Site Generation (SSG)** – Pre-render pages at build time for maximum performance
+- **Server-Side Rendering (SSR)** – Render pages on each request for dynamic content
+- **File-based Routing** – Create routes by simply adding files to the `pages` directory
+- **API Routes** – Build your backend directly inside Next.js
+- **Image Optimization** – Automatic image resizing and format conversion
+
+## Setting Up a New Project
+
+Getting started is simple with the `create-next-app` CLI tool:
+
+```bash
+npx create-next-app@latest my-blog
+cd my-blog
+npm run dev
+```
+
+This scaffolds a complete Next.js project with all the necessary configuration files.
+
+## Static Site Generation in Action
+
+SSG is one of the most powerful features of Next.js. Here's how you use `getStaticProps` to fetch data at build time:
+
+```javascript
+export async function getStaticProps() {
+  const posts = getAllPosts();
+  return {
+    props: {
+      posts,
+    },
+  };
+}
+```
+
+The data is fetched once during the build, and the resulting HTML is served statically — making it blazing fast.
+
+## Conclusion
+
+Next.js 14 is a mature, feature-rich framework that makes building production-ready React applications straightforward. Whether you're building a blog, e-commerce site, or complex web app, Next.js has you covered.

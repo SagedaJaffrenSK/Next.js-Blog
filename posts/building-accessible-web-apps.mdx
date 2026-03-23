@@ -1,0 +1,106 @@
+---
+title: 'Building Accessible Web Applications'
+date: '2024-05-05'
+author: 'Lena Park'
+tags: ['Accessibility', 'a11y', 'HTML', 'ARIA']
+excerpt: 'Web accessibility ensures everyone can use your application. Learn the fundamentals of building inclusive web experiences with semantic HTML and ARIA.'
+image: 'https://picsum.photos/seed/a11y/800/400'
+---
+
+## What is Web Accessibility?
+
+Web accessibility (a11y) means building websites that work for **everyone** — including people with visual, auditory, motor, or cognitive disabilities. It's not just a moral imperative; in many countries, it's also a **legal requirement**.
+
+## Semantic HTML is the Foundation
+
+Using the right HTML elements gives browsers and assistive technologies the context they need:
+
+```html
+<!-- Bad: no semantics -->
+<div class="header">
+  <div class="nav">
+    <div class="nav-item">Home</div>
+  </div>
+</div>
+
+<!-- Good: semantic HTML -->
+<header>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+    </ul>
+  </nav>
+</header>
+```
+
+Key semantic elements: `<header>`, `<nav>`, `<main>`, `<article>`, `<section>`, `<aside>`, `<footer>`.
+
+## ARIA Attributes
+
+ARIA (Accessible Rich Internet Applications) fills in the gaps where HTML semantics aren't enough:
+
+```html
+<!-- Announce dynamic content changes -->
+<div aria-live="polite" aria-atomic="true">
+  {statusMessage}
+</div>
+
+<!-- Describe icon-only buttons -->
+<button aria-label="Close dialog">
+  <XIcon />
+</button>
+
+<!-- Mark expanded/collapsed state -->
+<button aria-expanded={isOpen} aria-controls="menu">
+  Menu
+</button>
+```
+
+## Keyboard Navigation
+
+All interactive elements must be reachable and usable via keyboard:
+
+```javascript
+function Modal({ onClose }) {
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
+  return <div role="dialog" aria-modal="true">...</div>;
+}
+```
+
+## Color Contrast
+
+Text must have sufficient contrast against its background. WCAG 2.1 requires:
+
+- **Normal text**: at least **4.5:1** contrast ratio
+- **Large text**: at least **3:1** contrast ratio
+
+Use tools like the WebAIM Contrast Checker to verify your color combinations.
+
+## Focus Management
+
+Visible focus indicators help keyboard users navigate:
+
+```css
+/* Never remove focus outlines without replacement */
+:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+```
+
+## Testing Accessibility
+
+- **axe DevTools** – Browser extension for automated testing
+- **NVDA / VoiceOver** – Real screen reader testing
+- **Keyboard-only navigation** – Tab through your entire UI
+
+## Conclusion
+
+Accessibility is not an afterthought — it should be part of your design and development process from the start. The good news is that accessible code is also better code: cleaner, more semantic, and more maintainable.
